@@ -1,5 +1,5 @@
 # Career-Plan-Vision-Board
-Upload an image and include a caption or statement to match each portion of your career plan to create your Career Plan Vision Board. 
+Upload an image and include a caption or statement to match each portion of your career plan to create your Career Plan Vision Board. You may need to save images to your desktop to upload them if you haven't done so already. 
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -27,6 +27,7 @@ Upload an image and include a caption or statement to match each portion of your
         border: 2px solid #004aad;
         border-radius: 8px;
         background-color: #f9f9f9;
+        position: relative;
     }
     .step {
         display: none;
@@ -57,8 +58,9 @@ Upload an image and include a caption or statement to match each portion of your
     .help-btn {
         background-color: #ffcc00;
         color: #333;
-        float: right;
-        margin-top: -40px;
+        position: absolute;
+        top: 10px;
+        right: 10px;
     }
     input[type="file"], textarea {
         width: 100%;
@@ -68,6 +70,24 @@ Upload an image and include a caption or statement to match each portion of your
         max-width: 100%;
         margin-top: 10px;
         border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    .progress {
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #004aad;
+    }
+    /* Collage Preview */
+    .collage {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+    .collage-item {
+        text-align: center;
+    }
+    .collage-item img {
+        max-width: 100%;
         border-radius: 5px;
     }
     /* Help Modal */
@@ -98,8 +118,8 @@ Upload an image and include a caption or statement to match each portion of your
 <body>
 <header>Career Plan Vision Board</header>
 <div class="container">
-    <!-- Help Button -->
     <button class="help-btn" onclick="openHelp()">? Help</button>
+    <div class="progress" id="progress">Step 1 of 6</div>
 
     <!-- Steps -->
     <div class="step active" id="step1">
@@ -138,7 +158,20 @@ Upload an image and include a caption or statement to match each portion of your
         <h2>Why is this career a good fit?</h2>
         <p>Write a short explanation of why your dream career is a good fit for you.</p>
         <textarea id="caption5" placeholder="Write your explanation here..."></textarea>
-        <button onclick="downloadPDF()" style="margin-top:20px;background:#004aad;color:#fff;">Download as PDF</button>
+    </div>
+
+    <!-- NEW Collage Preview Page -->
+    <div class="step" id="step6">
+        <h2>Your Vision Board Preview</h2>
+        <div class="collage">
+            <div class="collage-item"><img id="finalImg1"><p id="finalCap1"></p></div>
+            <div class="collage-item"><img id="finalImg2"><p id="finalCap2"></p></div>
+            <div class="collage-item"><img id="finalImg3"><p id="finalCap3"></p></div>
+            <div class="collage-item"><img id="finalImg4"><p id="finalCap4"></p></div>
+        </div>
+        <h3 style="margin-top:20px;">Why is this career a good fit?</h3>
+        <p id="finalCap5"></p>
+        <button onclick="downloadPDF()" style="margin-top:20px;background:#004aad;color:#fff;">Open PDF in New Tab</button>
     </div>
 
     <!-- Navigation -->
@@ -156,7 +189,7 @@ Upload an image and include a caption or statement to match each portion of your
         <p>1. Upload an image for each section.<br>
            2. Add a caption or explanation.<br>
            3. Navigate using Next/Previous.<br>
-           4. On the last page, click "Download as PDF" to save your work.</p>
+           4. On the last page, click "Open PDF in New Tab" to view and print your work.</p>
     </div>
 </div>
 
@@ -164,12 +197,25 @@ https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js</scr
 https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js</script>
 <script>
 let currentStep = 1;
-const totalSteps = 5;
+const totalSteps = 6;
 
 function showStep(step) {
     document.querySelectorAll('.step').forEach((el, index) => {
         el.classList.toggle('active', index === step - 1);
     });
+    document.getElementById('progress').textContent = `Step ${step} of ${totalSteps}`;
+    if (step === 6) {
+        // Populate collage preview
+        document.getElementById('finalImg1').src = document.getElementById('preview1').src;
+        document.getElementById('finalCap1').textContent = document.getElementById('caption1').value;
+        document.getElementById('finalImg2').src = document.getElementById('preview2').src;
+        document.getElementById('finalCap2').textContent = document.getElementById('caption2').value;
+        document.getElementById('finalImg3').src = document.getElementById('preview3').src;
+        document.getElementById('finalCap3').textContent = document.getElementById('caption3').value;
+        document.getElementById('finalImg4').src = document.getElementById('preview4').src;
+        document.getElementById('finalCap4').textContent = document.getElementById('caption4').value;
+        document.getElementById('finalCap5').textContent = document.getElementById('caption5').value;
+    }
 }
 
 function nextStep() {
@@ -202,19 +248,15 @@ function closeHelp() {
 async function downloadPDF() {
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF();
-    const steps = document.querySelectorAll('.step');
-    for (let i = 0; i < steps.length; i++) {
-        steps[i].classList.add('active');
-        await html2canvas(steps[i]).then(canvas => {
-            const imgData = canvas.toDataURL('image/png');
-            const imgWidth = 190;
-            const imgHeight = (canvas.height * imgWidth) / canvas.width;
-            if (i > 0) pdf.addPage();
-            pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
-        });
-        steps[i].classList.remove('active');
-    }
-    pdf.save('Career_Vision_Board.pdf');
+    const collage = document.getElementById('step6');
+    await html2canvas(collage).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        const imgWidth = 190;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+    });
+    const blobUrl = pdf.output('bloburl');
+    window.open(blobUrl, '_blank');
 }
 </script>
 </body>
