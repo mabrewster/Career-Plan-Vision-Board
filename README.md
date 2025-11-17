@@ -1,5 +1,6 @@
 # Career-Plan-Vision-Board
 Upload an image and include a caption or statement to match each portion of your career plan to create your Career Plan Vision Board. You may need to save images to your desktop to upload them if you haven't done so already. 
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -171,7 +172,9 @@ Upload an image and include a caption or statement to match each portion of your
         </div>
         <h3 style="margin-top:20px;">Why is this career a good fit?</h3>
         <p id="finalCap5"></p>
-        <button onclick="downloadPDF()" style="margin-top:20px;background:#004aad;color:#fff;">Open PDF in New Tab</button>
+        <button onclick="downloadJPEG()" style="margin-top:20px;background:#004aad;color:#fff;">
+            Download Your Vision Board
+        </button>
     </div>
 
     <!-- Navigation -->
@@ -189,12 +192,11 @@ Upload an image and include a caption or statement to match each portion of your
         <p>1. Upload an image for each section.<br>
            2. Add a caption or explanation.<br>
            3. Navigate using Next/Previous.<br>
-           4. On the last page, click "Open PDF in New Tab" to view and print your work.</p>
+           4. On the last page, click "Download Your Vision Board" to save your work as a JPEG image.</p>
     </div>
 </div>
 
-https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js</script>
-https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs1.4.1/html2canvas.min.js</script>
 <script>
 let currentStep = 1;
 const totalSteps = 6;
@@ -245,19 +247,14 @@ function closeHelp() {
     document.getElementById('helpModal').style.display = 'none';
 }
 
-async function downloadPDF() {
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF();
+async function downloadJPEG() {
     const collage = document.getElementById('step6');
-    await html2canvas(collage).then(canvas => {
-        const imgData = canvas.toDataURL('image/png');
-        const imgWidth = 190;
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
-        pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
-    });
-    const blobUrl = pdf.output('bloburl');
-    window.open(blobUrl, '_blank');
+    const canvas = await html2canvas(collage);
+    const imgData = canvas.toDataURL('image/jpeg', 1.0);
+    const link = document.createElement('a');
+    link.href = imgData;
+    link.download = 'Career_Vision_Board.jpg';
+    link.click();
 }
 </script>
 </body>
-</html>
