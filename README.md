@@ -1,204 +1,221 @@
 # Career-Plan-Vision-Board
-<!DOCTYPE html>
+Upload an image and include a caption or statement to match each portion of your career plan to create your Career Plan Vision Board. 
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Career Vision Board</title>
+<title>Career Plan Vision Board</title>
 <style>
     body {
         font-family: Arial, sans-serif;
-        background: #fff;
+        background-color: #ffffff;
         color: #333;
         margin: 0;
         padding: 0;
     }
-    .container {
-        max-width: 900px;
-        margin: auto;
-        padding: 20px;
+    header {
+        background-color: #004aad;
+        color: #fff;
+        padding: 15px;
         text-align: center;
+        font-size: 1.5em;
     }
-    h1 {
-        color: #004aad;
-    }
-    .progress-bar {
-        width: 100%;
-        background: #ddd;
-        height: 20px;
-        width: 0%;
-        background: #ffd700;
-        transition: width 0.3s ease;
+    .container {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        border: 2px solid #004aad;
+        border-radius: 8px;
+        background-color: #f9f9f9;
     }
     .step {
         display: none;
     }
-    .active {
+    .step.active {
         display: block;
     }
-    input[type="text"], textarea {
-        width: 80%;
-        padding: 10px;
-        margin: 10px 0;
-        border: 2px solid #004aad;
-        border-radius: 5px;
+    .buttons {
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-between;
     }
     button {
-        background: #ffd700;
-        color: #004aad;
+        padding: 10px 15px;
+        font-size: 1em;
         border: none;
-        padding: 10px 20px;
-        margin: 10px;
-        font-size: 16px;
+        border-radius: 5px;
         cursor: pointer;
+    }
+    .next-btn {
+        background-color: #004aad;
+        color: #fff;
+    }
+    .prev-btn {
+        background-color: #ffcc00;
+        color: #333;
+    }
+    .help-btn {
+        background-color: #ffcc00;
+        color: #333;
+        float: right;
+        margin-top: -40px;
+    }
+    input[type="file"], textarea {
+        width: 100%;
+        margin-top: 10px;
+    }
+    img.preview {
+        max-width: 100%;
+        margin-top: 10px;
+        border: 1px solid #ccc;
         border-radius: 5px;
     }
-    #vision-board {
+    /* Help Modal */
+    .modal {
         display: none;
-        border: 3px solid #004aad;
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.6);
+        justify-content: center;
+        align-items: center;
+    }
+    .modal-content {
+        background: #fff;
         padding: 20px;
-        margin-top: 20px;
-        background: #f9f9f9;
-    }
-    .collage {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 15px;
-        margin-top: 20px;
-    }
-    .collage-item {
+        border-radius: 8px;
+        max-width: 500px;
         text-align: center;
     }
-    .collage-item img {
-        width: 150px;
-        height: 150px;
-        object-fit: cover;
-        border-radius: 8px;
-        display: block;
-        margin: auto;
-    }
-    .collage-item p {
-        margin-top: 8px;
-        font-weight: bold;
+    .close {
+        float: right;
+        cursor: pointer;
+        font-size: 1.2em;
         color: #004aad;
     }
 </style>
 </head>
 <body>
+<header>Career Plan Vision Board</header>
 <div class="container">
-    <h1>Career Planning Vision Board</h1>
-    <div class="progress-bar"><div class="progress" id="progress"></div></div>
-    <div id="steps">
-        <!-- Step 1 -->
-        <div class="step active" id="step1">
-            <h2>Step 1: Upload Your Photo & Caption</h2>
-            <input type="file" id="photo1" accept="image/*"><br>
-            <input type="text" id="caption1" placeholder="Enter caption for this photo">
-            <button onclick="nextStep()">Next</button>
-        </div>
-        <!-- Step 2 -->
-        <div class="step" id="step2">
-            <h2>Step 2: Upload Photo & Caption</h2>
-            <input type="file" id="photo2" accept="image/*"><br>
-            <input type="text" id="caption2" placeholder="Enter caption for this photo">
-            <button onclick="prevStep()">Back</button>
-            <button onclick="nextStep()">Next</button>
-        </div>
-        <!-- Step 3 -->
-        <div class="step" id="step3">
-            <h2>Step 3: Upload Photo & Caption</h2>
-            <input type="file" id="photo3" accept="image/*"><br>
-            <input type="text" id="caption3" placeholder="Enter caption for this photo">
-            <button onclick="prevStep()">Back</button>
-            <button onclick="nextStep()">Next</button>
-        </div>
-        <!-- Step 4 -->
-        <div class="step" id="step4">
-            <h2>Step 4: Upload Photo & Caption</h2>
-            <input type="file" id="photo4" accept="image/*"><br>
-            <input type="text" id="caption4" placeholder="Enter caption for this photo">
-            <button onclick="prevStep()">Back</button>
-            <button onclick="nextStep()">Next</button>
-        </div>
-        <!-- Step 5 -->
-        <div class="step" id="step5">
-            <h2>Step 5: Upload Photo & Caption</h2>
-            <input type="file" id="photo5" accept="image/*"><br>
-            <input type="text" id="caption5" placeholder="Enter caption for this photo">
-            <button onclick="prevStep()">Back</button>
-            <button onclick="generateBoard()">Finish</button>
-        </div>
+    <!-- Help Button -->
+    <button class="help-btn" onclick="openHelp()">? Help</button>
+
+    <!-- Steps -->
+    <div class="step active" id="step1">
+        <h2>Dream Career Image</h2>
+        <p>Upload an image that represents your dream career. Add a caption/statement explaining why you chose this image.</p>
+        <input type="file" accept="image/*" onchange="previewImage(event, 'preview1')">
+        <img id="preview1" class="preview">
+        <textarea id="caption1" placeholder="Write your caption here..."></textarea>
     </div>
 
-    <!-- Vision Board Display -->
-    <div id="vision-board">
-        <h2>Your Vision Board</h2>
-        <div class="collage" id="images"></div>
-        <button onclick="takeScreenshot()">Download Screenshot</button>
-        <button onclick="resetBoard()">Start Over</button>
+    <div class="step" id="step2">
+        <h2>Skills & Strengths</h2>
+        <p>Upload an image that represents your strengths or skills. Add a caption/statement that lists your 1 strength and 2 skills.</p>
+        <input type="file" accept="image/*" onchange="previewImage(event, 'preview2')">
+        <img id="preview2" class="preview">
+        <textarea id="caption2" placeholder="Write your caption here..."></textarea>
+    </div>
+
+    <div class="step" id="step3">
+        <h2>Education & Training</h2>
+        <p>Upload an image that represents the education or training you’ll need. Add a caption/statement explaining your plan.</p>
+        <input type="file" accept="image/*" onchange="previewImage(event, 'preview3')">
+        <img id="preview3" class="preview">
+        <textarea id="caption3" placeholder="Write your caption here..."></textarea>
+    </div>
+
+    <div class="step" id="step4">
+        <h2>Lifestyle Goals</h2>
+        <p>Upload an image that represents the lifestyle you want. Add a caption explaining why this matters to you.</p>
+        <input type="file" accept="image/*" onchange="previewImage(event, 'preview4')">
+        <img id="preview4" class="preview">
+        <textarea id="caption4" placeholder="Write your caption here..."></textarea>
+    </div>
+
+    <div class="step" id="step5">
+        <h2>Why is this career a good fit?</h2>
+        <p>Write a short explanation of why your dream career is a good fit for you.</p>
+        <textarea id="caption5" placeholder="Write your explanation here..."></textarea>
+        <button onclick="downloadPDF()" style="margin-top:20px;background:#004aad;color:#fff;">Download as PDF</button>
+    </div>
+
+    <!-- Navigation -->
+    <div class="buttons">
+        <button class="prev-btn" onclick="prevStep()">Previous</button>
+        <button class="next-btn" onclick="nextStep()">Next</button>
     </div>
 </div>
 
-<script/cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js</script>
+<!-- Help Modal -->
+<div class="modal" id="helpModal">
+    <div class="modal-content">
+        <span class="close" onclick="closeHelp()">&times;</span>
+        <h3>How to Complete Your Vision Board</h3>
+        <p>1. Upload an image for each section.<br>
+           2. Add a caption or explanation.<br>
+           3. Navigate using Next/Previous.<br>
+           4. On the last page, click "Download as PDF" to save your work.</p>
+    </div>
+</div>
+
+https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js</script>
+https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js</script>
 <script>
 let currentStep = 1;
 const totalSteps = 5;
 
-function updateProgress() {
-    document.getElementById('progress').style.width = ((currentStep-1)/totalSteps)*100 + '%';
-}
-
-function nextStep() {
-    document.getElementById(`step${currentStep}`).classList.remove('active');
-    currentStep++;
-    document.getElementById(`step${currentStep}`).classList.add('active');
-    updateProgress();
-}
-
-function prevStep() {
-    document.getElementById(`step${currentStep}`).classList.remove('active');
-    currentStep--;
-    document.getElementById(`step${currentStep}`).classList.add('active');
-    updateProgress();
-}
-
-function generateBoard() {
-    document.getElementById('steps').style.display = 'none';
-    document.getElementById('vision-board').style.display = 'block';
-
-    let imageContainer = document.getElementById('images');
-    imageContainer.innerHTML = '';
-    for (let i = 1; i <= 5; i++) {
-        let fileInput = document.getElementById(`photo${i}`);
-        let captionText = document.getElementById(`caption${i}`).value;
-        if (fileInput.files[0]) {
-            let wrapper = document.createElement('div');
-            wrapper.classList.add('collage-item');
-            let img = document.createElement('img');
-            img.src = URL.createObjectURL(fileInput.files[0]);
-            let caption = document.createElement('p');
-            caption.innerText = captionText;
-            wrapper.appendChild(img);
-            wrapper.appendChild(caption);
-            imageContainer.appendChild(wrapper);
-        }
-    }
-}
-
-function takeScreenshot() {
-    html2canvas(document.querySelector("#vision-board")).then(canvas => {
-        let link = document.createElement('a');
-        link.download = 'vision-board.png';
-        link.href = canvas.toDataURL();
-        link.click();
+function showStep(step) {
+    document.querySelectorAll('.step').forEach((el, index) => {
+        el.classList.toggle('active', index === step - 1);
     });
 }
 
-function resetBoard() {
-    location.reload();
+function nextStep() {
+    if (currentStep < totalSteps) {
+        currentStep++;
+        showStep(currentStep);
+    }
 }
 
-updateProgress();
+function prevStep() {
+    if (currentStep > 1) {
+        currentStep--;
+        showStep(currentStep);
+    }
+}
+
+function previewImage(event, id) {
+    const img = document.getElementById(id);
+    img.src = URL.createObjectURL(event.target.files[0]);
+}
+
+function openHelp() {
+    document.getElementById('helpModal').style.display = 'flex';
+}
+
+function closeHelp() {
+    document.getElementById('helpModal').style.display = 'none';
+}
+
+async function downloadPDF() {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF();
+    const steps = document.querySelectorAll('.step');
+    for (let i = 0; i < steps.length; i++) {
+        steps[i].classList.add('active');
+        await html2canvas(steps[i]).then(canvas => {
+            const imgData = canvas.toDataURL('image/png');
+            const imgWidth = 190;
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+            if (i > 0) pdf.addPage();
+            pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+        });
+        steps[i].classList.remove('active');
+    }
+    pdf.save('Career_Vision_Board.pdf');
+}
 </script>
 </body>
 </html>
